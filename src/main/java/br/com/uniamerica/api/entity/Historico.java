@@ -1,5 +1,6 @@
 package br.com.uniamerica.api.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
  * @version 1.0.0
  */
 @Entity
+@AllArgsConstructor
 @Table(name = "historicos", schema = "public")
 public class Historico extends AbstractEntity {
 
