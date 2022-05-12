@@ -25,13 +25,13 @@ public class AgendaService {
 
     private Historico historico;
 
-    public void insert(Agenda agenda){
-        this.validarFormulario(agenda);
+    public void insert(Agenda agenda, String observacao){
+        this.validarFormulario(agenda, observacao);
         this.saveTransaction(agenda);
     }
 
-    public void update(Agenda agenda){
-        this.validarFormulario(agenda);
+    public void update(Agenda agenda, String observacao){
+        this.validarFormulario(agenda, observacao);
         this.saveTransaction(agenda);
     }
 
@@ -48,7 +48,7 @@ public class AgendaService {
         this.agendaRepository.save(agenda);
     }
 
-    public void validarFormulario(Agenda agenda){
+    public void validarFormulario(Agenda agenda, String observacao){
 
         if(agenda.getStatus() == null){
 
@@ -67,7 +67,7 @@ public class AgendaService {
             Historico historico = new Historico(
                     LocalDateTime.now(),
                     agenda.getStatus(),
-                    "", agenda.getSecretaria(),
+                    observacao, agenda.getSecretaria(),
                     agenda.getPaciente(),
                     agenda);
 
@@ -77,7 +77,7 @@ public class AgendaService {
             Historico historico = new Historico(
                     LocalDateTime.now(),
                     agenda.getStatus(),
-                    "", agenda.getSecretaria(),
+                    observacao, agenda.getSecretaria(),
                     agenda.getPaciente(),
                     agenda);
 

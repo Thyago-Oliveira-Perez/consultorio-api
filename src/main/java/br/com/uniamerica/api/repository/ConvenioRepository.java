@@ -9,12 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 31/03/2022
- * @version 1.0.0
- */
 @Repository
 public interface ConvenioRepository extends JpaRepository<Convenio, Long> {
 

@@ -10,12 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @Repository
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
 

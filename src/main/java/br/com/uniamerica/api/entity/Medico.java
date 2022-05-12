@@ -6,12 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @Entity
 @NoArgsConstructor
 @Table(name = "medicos", schema = "public")

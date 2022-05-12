@@ -10,12 +10,6 @@ import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @Entity
 @Table(name = "secretarias", schema = "public")
 public class Secretaria extends Pessoa {

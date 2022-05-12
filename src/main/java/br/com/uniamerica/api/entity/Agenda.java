@@ -6,12 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @Entity
 @Table(name = "agendas", schema = "public")
 public class Agenda extends AbstractEntity {

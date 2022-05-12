@@ -10,11 +10,5 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 31/03/2022
- * @version 1.0.0
- */
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Long> { }

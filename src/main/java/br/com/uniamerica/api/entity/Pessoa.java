@@ -10,12 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @MappedSuperclass
 @NoArgsConstructor
 public abstract class Pessoa extends AbstractEntity {
@@ -62,12 +56,6 @@ public abstract class Pessoa extends AbstractEntity {
     @Column(name = "sexo", nullable = false, length = 20)
     private Sexo sexo;
 
-    /**
-     * @see AbstractEntity#AbstractEntity(Long) 
-     *
-     * @param id
-     * @param nome
-     */
     public Pessoa(Long id, String nome){
         super(id);
         this.nome = nome;

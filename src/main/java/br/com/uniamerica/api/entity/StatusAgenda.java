@@ -1,11 +1,5 @@
 package br.com.uniamerica.api.entity;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 public enum StatusAgenda {
 
     pendente("Pendente"),

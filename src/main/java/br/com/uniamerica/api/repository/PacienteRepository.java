@@ -9,12 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 05/04/2022
- * @version 1.0.0
- */
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
