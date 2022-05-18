@@ -72,6 +72,7 @@ public class AgendaService {
                     agenda);
 
             historicoRepository.save(historico);
+
         }else{
 
             Historico historico = new Historico(
