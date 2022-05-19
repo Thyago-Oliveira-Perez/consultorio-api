@@ -16,6 +16,10 @@ public class Agenda extends AbstractEntity {
     private StatusAgenda status;
 
     @Getter @Setter
+    @Column(name="observacoes")
+    private String observacao;
+
+    @Getter @Setter
     @Column(name = "data_de", nullable = false)
     private LocalDateTime dataDe;
 

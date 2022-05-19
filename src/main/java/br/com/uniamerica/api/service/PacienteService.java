@@ -18,9 +18,9 @@ public class PacienteService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public void insert(Paciente paciente){
+    public void save(Paciente paciente){
         this.validarFormulario(paciente);
-        this.saveTransaction(paciente);
+        this.insert(paciente);
     }
 
     public Optional<Paciente> findById(Long id){
@@ -32,7 +32,7 @@ public class PacienteService {
     }
 
     @Transactional
-    public void saveTransaction(Paciente paciente){
+    public void insert(Paciente paciente){
         this.pacienteRepository.save(paciente);
     }
 

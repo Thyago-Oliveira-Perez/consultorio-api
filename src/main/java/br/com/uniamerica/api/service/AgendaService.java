@@ -25,13 +25,13 @@ public class AgendaService {
 
     private Historico historico;
 
-    public void insert(Agenda agenda, String observacao){
-        this.validarFormulario(agenda, observacao);
-        this.saveTransaction(agenda);
+    public void save(Agenda agenda){
+        this.validarFormInsert(agenda);
+        this.agendaRepository.save(agenda);
     }
 
-    public void update(Agenda agenda, String observacao){
-        this.validarFormulario(agenda, observacao);
+    public void update(Agenda agenda){
+        this.validarFormUpdate(agenda);
         this.saveTransaction(agenda);
     }
 
@@ -48,7 +48,20 @@ public class AgendaService {
         this.agendaRepository.save(agenda);
     }
 
-    public void validarFormulario(Agenda agenda, String observacao){
+    public void validarFormUpdate(Agenda agenda){
+
+        if(agenda.getEncaixe()){
+
+        }
+        if(agenda.getDataDe().compareTo(LocalDateTime.now()) > 0
+                &&
+                agenda.getDataAte().compareTo(LocalDateTime.now()) > 0){
+            throw new RuntimeException(("Data inválida"));
+        }
+
+    }
+
+    public void validarFormInsert(Agenda agenda){
 
         if(agenda.getStatus() == null){
 
@@ -60,14 +73,14 @@ public class AgendaService {
             if(agenda.getDataAte() == null){
                 throw new RuntimeException(("Data final não informada"));
             }
-            if(agenda.getDataAte().compareTo(LocalDateTime.now()) > 0){
+            if(agenda.getDataAte().compareTo(agenda.getDataDe()) > 0){
                 throw new RuntimeException(("Data inválida"));
             }
 
             Historico historico = new Historico(
                     LocalDateTime.now(),
                     agenda.getStatus(),
-                    observacao, agenda.getSecretaria(),
+                    agenda.getObservacao(), agenda.getSecretaria(),
                     agenda.getPaciente(),
                     agenda);
 
@@ -78,7 +91,7 @@ public class AgendaService {
             Historico historico = new Historico(
                     LocalDateTime.now(),
                     agenda.getStatus(),
-                    observacao, agenda.getSecretaria(),
+                    agenda.getObservacao(), agenda.getSecretaria(),
                     agenda.getPaciente(),
                     agenda);
 
