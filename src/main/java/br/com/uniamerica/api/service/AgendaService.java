@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -31,7 +33,7 @@ public class AgendaService {
     }
 
     public void update(Agenda agenda){
-        this.validarFormUpdate(agenda);
+        this.validationUpdate(agenda);
         this.saveTransaction(agenda);
     }
 
@@ -48,55 +50,71 @@ public class AgendaService {
         this.agendaRepository.save(agenda);
     }
 
-    public void validarFormUpdate(Agenda agenda){
+    public void validationUpdate(Agenda agenda){
 
-        if(agenda.getEncaixe()){
-
+        if(!agenda.getEncaixe())
+        {
+            Assert.isTrue(dataValida(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(horarioValido(agenda.getDataDe()), "Assets = false");
+            Assert.isTrue(horarioValido(agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(diaValido(agenda.getDataDe()), "Assets = false");
+            Assert.isTrue(diaValido(agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
+        }else
+        {
+            Assert.isTrue(horarioValido(agenda.getDataDe()), "Assets = false");
+            Assert.isTrue(horarioValido(agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
         }
-        if(agenda.getDataDe().compareTo(LocalDateTime.now()) > 0
-                &&
-                agenda.getDataAte().compareTo(LocalDateTime.now()) > 0){
-            throw new RuntimeException(("Data inválida"));
-        }
-
     }
 
-    public void validarFormInsert(Agenda agenda){
+    public void validarFormInsert(Agenda agenda){}
 
-        if(agenda.getStatus() == null){
-
-            agenda.setStatus(StatusAgenda.pendente);
-
-            if(agenda.getDataDe() == null){
-                throw new RuntimeException(("Data inicial não informada"));
+    private boolean dataValida(LocalDateTime dataDe, LocalDateTime dataAte)
+    {
+        if(dataDe.isAfter(LocalDateTime.now())
+                &&
+           dataAte.isAfter(LocalDateTime.now()))
+        {
+            if(dataDe.isBefore(dataAte))
+            {
+                return true;
             }
-            if(agenda.getDataAte() == null){
-                throw new RuntimeException(("Data final não informada"));
-            }
-            if(agenda.getDataAte().compareTo(agenda.getDataDe()) > 0){
-                throw new RuntimeException(("Data inválida"));
-            }
-
-            Historico historico = new Historico(
-                    LocalDateTime.now(),
-                    agenda.getStatus(),
-                    agenda.getObservacao(), agenda.getSecretaria(),
-                    agenda.getPaciente(),
-                    agenda);
-
-            historicoRepository.save(historico);
-
-        }else{
-
-            Historico historico = new Historico(
-                    LocalDateTime.now(),
-                    agenda.getStatus(),
-                    agenda.getObservacao(), agenda.getSecretaria(),
-                    agenda.getPaciente(),
-                    agenda);
-
-            historicoRepository.save(historico);
         }
+        return false;
+    }
+
+    private boolean horarioValido(LocalDateTime data)
+    {
+        if(data.getHour() > 8 && data.getHour() < 12
+           ||
+           data.getHour() > 14 && data.getHour() < 18)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean diaValido(LocalDateTime data)
+    {
+        return !data.getDayOfWeek().equals(DayOfWeek.SATURDAY)
+                &&
+                !data.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+                ? false : true;
+    }
+
+    public boolean horariosMedicosEPacientes(Agenda agenda)
+    {
+        if(agendaRepository.conflitoMedicoPaciente(
+                agenda.getDataDe(),
+                agenda.getDataAte(),
+                agenda.getMedico().getId(),
+                agenda.getPaciente().getId()
+        ).size() > 0)
+        {
+            return true;
+        }
+            return false;
     }
 
 }

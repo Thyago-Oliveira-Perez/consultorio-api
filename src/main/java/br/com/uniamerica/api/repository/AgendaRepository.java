@@ -9,6 +9,21 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
-public interface AgendaRepository extends JpaRepository<Agenda, Long> { }
+public interface AgendaRepository extends JpaRepository<Agenda, Long>
+{
+    @Query("SELECT Agenda FROM Agenda " +
+            "WHERE :datade BETWEEN Agenda.dataDe AND Agenda.dataAte " +
+            "AND :dataAte BETWEEN Agenda.dataDe AND Agenda.dataAte " +
+            "AND Agenda.medico = :medico " +
+            "AND Agenda.paciente = :paciente")
+    public List<Agenda> conflitoMedicoPaciente(
+            @Param("datade") LocalDateTime dataDe,
+            @Param("dataate") LocalDateTime dataAte,
+            @Param("medico") Long idMedico,
+            @Param("paciente") Long idPaciente
+    );
+
+}
