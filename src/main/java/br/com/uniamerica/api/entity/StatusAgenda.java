@@ -11,10 +11,6 @@ public enum StatusAgenda {
 
     public final String valor;
 
-    /**
-     *
-     * @param valor
-     */
     private StatusAgenda(String valor){
         this.valor = valor;
     }

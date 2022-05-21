@@ -33,7 +33,7 @@ public class HistoricoController {
     public ResponseEntity<?> insert(@RequestBody Historico historico)
     {
         try{
-            this.historicoService.saveHistorico(historico);
+            this.historicoService.saveInsertHistorico(historico);
             return ResponseEntity.ok().body(("Historico Cadastrado com Sucesso!"));
         }catch (RuntimeException e)
         {

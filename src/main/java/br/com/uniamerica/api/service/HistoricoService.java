@@ -43,7 +43,7 @@ public class HistoricoService {
 
     }
 
-    public void saveHistorico(Historico historico){
+    public void saveInsertHistorico(Historico historico){
         this.validacaoInsert(historico);
         this.insert(historico);
     }

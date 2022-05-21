@@ -1,6 +1,7 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Agenda;
+import br.com.uniamerica.api.entity.Secretaria;
 import br.com.uniamerica.api.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,11 +30,12 @@ public class AgendaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody Agenda agenda)
+    public ResponseEntity<?> insert(@RequestBody Agenda agenda,
+                                    @RequestBody Secretaria secretaria)
     {
         try
         {
-            this.agendaService.save(agenda);
+            this.agendaService.save(agenda, secretaria);
             return ResponseEntity.ok().body("Agenda Cadastrada com Sucesso!");
         }
         catch (RuntimeException e)
