@@ -26,4 +26,10 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long>
             @Param("paciente") Long idPaciente
     );
 
+    @Query("UPDATE Agenda agenda " +
+            "SET agenda.status = :agendaStatus " +
+            "WHERE agenda.id = : idAgenda")
+    public void updateStatus(@Param("agendaStatus") StatusAgenda agendaStatus,
+                             @Param("idAgenda") Long idAgenda);
+
 }
