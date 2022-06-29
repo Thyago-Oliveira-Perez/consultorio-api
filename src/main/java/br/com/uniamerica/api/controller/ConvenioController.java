@@ -62,7 +62,7 @@ public class ConvenioController {
             return ResponseEntity.ok().body("Convenio Desabilitado com Sucesso!");
         }catch(RuntimeException e)
         {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Convenio já está desativado.");
         }
     }
 }

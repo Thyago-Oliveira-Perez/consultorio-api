@@ -30,7 +30,9 @@ public class ConvenioService {
     @Transactional
     public void update(Convenio convenio, Long id)
     {
-        if(id == convenio.getId()){
+        System.out.println(id + "   " + convenio.getId());
+
+        if(id.equals(convenio.getId())){
             this.convenioRepository.save(convenio);
         }else{
             throw new RuntimeException();
@@ -40,7 +42,10 @@ public class ConvenioService {
     @Transactional
     public void updateStatus(Long id, Convenio convenio)
     {
-        if(id == convenio.getId()){
+
+        Optional<Convenio> convenioEntity = this.convenioRepository.findById(id);
+
+        if(convenioEntity.isPresent() && convenioEntity.get().getExcluido() == null){
             this.convenioRepository.updateStatus(LocalDateTime.now(), convenio.getId());
         }else{
             throw new RuntimeException();
