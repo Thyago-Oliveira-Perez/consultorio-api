@@ -1,7 +1,6 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Agenda;
-import br.com.uniamerica.api.entity.Secretaria;
 import br.com.uniamerica.api.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,12 +29,11 @@ public class AgendaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody Agenda agenda,
-                                    @RequestBody Secretaria secretaria)
+    public ResponseEntity<?> insert(@RequestBody Agenda agenda)
     {
         try
         {
-            this.agendaService.save(agenda, secretaria);
+            this.agendaService.insert(agenda);
             return ResponseEntity.ok().body("Agenda Cadastrada com Sucesso!");
         }
         catch (RuntimeException e)
@@ -44,7 +42,7 @@ public class AgendaController {
         }
     }
 
-    @PutMapping("/{idAgenda}")
+    @PutMapping("/update/{idAgenda}")
     public ResponseEntity<?> update(@PathVariable("idAgenda") Long idAgenda,
                                     @RequestBody Agenda agenda)
     {
@@ -59,13 +57,12 @@ public class AgendaController {
         }
     }
 
-    @PutMapping("/status/{idAgenda}")
-    public ResponseEntity<?> updateStatus(@PathVariable("idAgenda") Long idAgenda,
-                                          @RequestBody Agenda agenda)
+    @PutMapping("/status")
+    public ResponseEntity<?> updateStatus(@RequestBody Agenda agenda)
     {
         try
         {
-            this.agendaService.update(agenda);
+            this.agendaService.updateStatus(agenda, agenda.getStatus(), agenda.getSecretaria());
             return ResponseEntity.ok().body("Status da Agenda Atualizada com Sucesso!");
         }
         catch (RuntimeException e)

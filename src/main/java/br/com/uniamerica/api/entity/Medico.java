@@ -1,11 +1,17 @@
 package br.com.uniamerica.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @NoArgsConstructor
 @Table(name = "medicos", schema = "public")
@@ -34,13 +40,6 @@ public class Medico extends Pessoa {
     @ManyToOne(fetch = FetchType.LAZY)
     private Especialidade especialidade;
 
-    /**
-     * @see Pessoa#Pessoa(Long, String)
-     *
-     * @param id
-     * @param nome
-     * @param crm
-     */
     public Medico(Long id, String nome, String crm){
         super(id, nome);
         this.crm = crm;

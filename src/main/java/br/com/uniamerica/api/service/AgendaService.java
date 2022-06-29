@@ -3,14 +3,12 @@ package br.com.uniamerica.api.service;
 import br.com.uniamerica.api.entity.*;
 import br.com.uniamerica.api.repository.AgendaRepository;
 import br.com.uniamerica.api.repository.HistoricoRepository;
-import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.lang.model.element.PackageElement;
 import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -27,9 +25,9 @@ public class AgendaService {
 
     private Historico historico;
 
-    public void insert(Agenda agenda, Secretaria secretaria){
-        this.validationInsert(agenda, secretaria);
-        this.agendaRepository.save(agenda);
+    public void insert(Agenda agenda){
+        this.validationInsert(agenda);
+        this.saveTransaction(agenda);
     }
 
     public void update(Agenda agenda){
@@ -37,33 +35,28 @@ public class AgendaService {
         this.saveTransaction(agenda);
     }
 
-    public void updateStatusToRejeitado(Agenda agenda, Secretaria secretaria)
-    {
-        this.updateStatusPendenteToRejeitado(agenda, secretaria);
-        this.saveTransaction(agenda);
-    }
+    @Transactional
+    public void updateStatus(Agenda agenda, StatusAgenda status, Secretaria secretaria) {
 
-    public void updateStatusToAprovado(Agenda agenda, Secretaria secretaria)
-    {
-        this.updateStatusPendenteToAprovado(agenda, secretaria);
-        this.saveTransaction(agenda);
-    }
+        switch (status) {
+            case rejeitado:
+                this.updateStatusPendenteToRejeitado(agenda, secretaria);
+                break;
+            case aprovado:
+                this.updateStatusPendenteToAprovado(agenda, secretaria);
+                break;
 
-    public void updateStatusToCancelado(Agenda agenda, Secretaria secretaria, Paciente paciente)
-    {
-        this.updateStatusPendenteOrAprovadoToCancelado(agenda, secretaria, paciente);
-        this.saveTransaction(agenda);
-    }
+            case cancelado:
+                this.updateStatusPendenteOrAprovadoToCancelado(agenda, secretaria, agenda.getPaciente());
+                break;
+            case compareceu:
+                this.updateStatusAprovadoToCompareceu(agenda, secretaria);
+                break;
 
-    public void updateStatusToCompareceu(Agenda agenda, Secretaria secretaria)
-    {
-        this.updateStatusAprovadoToCompareceu(agenda, secretaria);
-    }
-
-    public void updateStatusToNaoCompareceu(Agenda agenda, Secretaria secretaria)
-    {
-        this.updateStatusAprovadoToNaoCompareceu(agenda, secretaria);
-        this.saveTransaction(agenda);
+            case nao_compareceu:
+                this.updateStatusAprovadoToNaoCompareceu(agenda, secretaria);
+                break;
+        }
     }
 
     public void updateStatusPendenteToRejeitado(Agenda agenda, Secretaria secretaria)
@@ -122,7 +115,7 @@ public class AgendaService {
         if(secretaria != null)
         {
             Assert.isTrue(agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.aprovado), "Assets = false");
-            Assert.isTrue(dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
 
             agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
 
@@ -140,7 +133,7 @@ public class AgendaService {
         if(secretaria != null)
         {
             Assert.isTrue(agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.aprovado), "Assets = false");
-            Assert.isTrue(dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
 
             agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
 
@@ -169,24 +162,24 @@ public class AgendaService {
     {
         if(!agenda.getEncaixe())
         {
-            validacoesPadroes(agenda);
+            this.validacoesPadroes(agenda);
         }else
         {
-            Assert.isTrue(horarioValido(agenda.getDataDe()), "Assets = false");
-            Assert.isTrue(horarioValido(agenda.getDataAte()), "Assets = false");
-            Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
+            Assert.isTrue(horarioValido(agenda.getDataDe()), "Horario de inválido");
+            Assert.isTrue(horarioValido(agenda.getDataAte()), "Horario ate inválido");
+            //Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
         }
     }
 
-    public void validationInsert(Agenda agenda, Secretaria secretaria)
+    public void validationInsert(Agenda agenda)
     {
-        if(secretaria != null)
+        if(agenda.getSecretaria() != null)
         {
-            validacoesPadroes(agenda);
+            this.validacoesPadroes(agenda);
             agenda.setStatus(StatusAgenda.aprovado);
         }else
         {
-            validacoesPadroes(agenda);
+            this.validacoesPadroes(agenda);
             agenda.setStatus(StatusAgenda.pendente);
         }
     }
@@ -237,6 +230,7 @@ public class AgendaService {
     private boolean horariosMedicosEPacientes(Agenda agenda)
     {
         if(agendaRepository.conflitoMedicoPaciente(
+                agenda.getId(),
                 agenda.getDataDe(),
                 agenda.getDataAte(),
                 agenda.getMedico().getId(),
@@ -250,13 +244,13 @@ public class AgendaService {
 
     private void validacoesPadroes(Agenda agenda)
     {
-        Assert.isTrue(!agenda.getEncaixe(), "Assets = false");
-        Assert.isTrue(dataValida(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
-        Assert.isTrue(horarioValido(agenda.getDataDe()), "Assets = false");
-        Assert.isTrue(horarioValido(agenda.getDataAte()), "Assets = false");
-        Assert.isTrue(diaValido(agenda.getDataDe()), "Assets = false");
-        Assert.isTrue(diaValido(agenda.getDataAte()), "Assets = false");
-        Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
+        Assert.isTrue(!agenda.getEncaixe(), "Agenda não é encaixe!");
+        Assert.isTrue(this.dataValida(agenda.getDataDe(), agenda.getDataAte()), "Data inválida!");
+        Assert.isTrue(this.horarioValido(agenda.getDataDe()), "Horário de inválido");
+        Assert.isTrue(this.horarioValido(agenda.getDataAte()), "Horário ate inválido");
+        Assert.isTrue(this.diaValido(agenda.getDataDe()), "Data de inválida");
+        Assert.isTrue(this.diaValido(agenda.getDataAte()), "Data até inválida");
+        Assert.isTrue(this.horariosMedicosEPacientes(agenda), "Conflito de horario medico e paciente");
     }
 
 }

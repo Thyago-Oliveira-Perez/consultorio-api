@@ -40,7 +40,7 @@ public class MedicoController {
         }
     }
 
-    @PutMapping("/{idMedico}")
+    @PutMapping("/update/{idMedico}")
     public ResponseEntity<?> update(@PathVariable("idMedico") Long idMedico,
                                     @RequestBody Medico medico)
     {

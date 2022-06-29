@@ -39,7 +39,7 @@ public class EspecialidadeController {
         }
     }
 
-    @PutMapping("/{idEspecialidade}")
+    @PutMapping("/update/{idEspecialidade}")
     public ResponseEntity<?> update(@PathVariable("idEspecialidade") Long idEspecialidade,
                                     @RequestBody Especialidade especialidade)
     {

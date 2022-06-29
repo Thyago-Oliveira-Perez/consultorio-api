@@ -9,6 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -39,6 +43,9 @@ public abstract class Pessoa extends AbstractEntity {
     private String rg;
 
     @Getter @Setter
+    @Email(message = "Email inválido")
+    @NotEmpty(message = "Email não pode ser vazio")
+    @NotNull(message = "Email não pode ser nulo")
     @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 

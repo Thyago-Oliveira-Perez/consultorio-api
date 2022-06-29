@@ -2,15 +2,11 @@ package br.com.uniamerica.api.entity;
 
 public enum TipoAtendimento {
 
-    particular("Particular"),
-        convenio("Convênio");
+    particular("particular"),
+        convenio("convênio");
 
     public final String valor;
 
-    /**
-     *
-     * @param valor
-     */
     private TipoAtendimento(String valor){
         this.valor = valor;
     }

@@ -2,12 +2,12 @@ package br.com.uniamerica.api.entity;
 
 public enum StatusAgenda {
 
-    pendente("Pendente"),
-        aprovado("Aprovado"),
-            rejeitado("Rejeitado"),
-                cancelado("Cancelado"),
-                    compareceu("Compareceu"),
-                        nao_compareceu("Não Compareceu");
+    pendente("pendente"),
+        aprovado("aprovado"),
+            rejeitado("rejeitado"),
+                cancelado("cancelado"),
+                    compareceu("compareceu"),
+                        nao_compareceu("não compareceu");
 
     public final String valor;
 

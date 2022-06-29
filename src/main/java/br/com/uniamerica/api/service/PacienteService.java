@@ -65,7 +65,7 @@ public class PacienteService {
             if(paciente.getDataVencimento() == null){
                 throw new RuntimeException(("Data de vencimento do cartão não informada"));
             }
-            if(paciente.getDataVencimento().compareTo(LocalDateTime.now()) > 0){
+            if(paciente.getDataVencimento().isBefore(LocalDateTime.now())){
                 throw new RuntimeException(("Data de vencimento expirada"));
             }
 

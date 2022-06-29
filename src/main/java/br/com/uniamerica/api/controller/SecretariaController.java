@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.print.DocFlavor;
 
 @Controller
-@RequestMapping("/secretarias")
+@RequestMapping("/api/secretarias")
 public class SecretariaController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class SecretariaController {
         }
     }
 
-    @PutMapping("/{idSecretaria}")
+    @PutMapping("/update/{idSecretaria}")
     public ResponseEntity<?> update(@PathVariable("idSecretaria")Long idSecretaria,
                                     @RequestBody Secretaria secretaria)
     {

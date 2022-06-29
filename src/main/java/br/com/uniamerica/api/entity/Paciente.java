@@ -3,14 +3,18 @@ package br.com.uniamerica.api.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "pacientes", schema = "public")
-public class Paciente extends Pessoa implements Serializable {
+public class Paciente extends Pessoa{
 
     @Getter @Setter
     @Enumerated(EnumType.STRING)

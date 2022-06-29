@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+@Controller
 @RequestMapping("/api/convenios")
 public class ConvenioController {
 
@@ -38,7 +40,7 @@ public class ConvenioController {
         }
     }
 
-    @PutMapping("/{idConvenio}")
+    @PutMapping("/update/{idConvenio}")
     public ResponseEntity<?> update(@PathVariable("idConvenio") Long idConvenio,
                                     @RequestBody Convenio convenio)
     {
@@ -51,7 +53,7 @@ public class ConvenioController {
         }
     }
 
-    @PutMapping("/update/{idConvenio}")
+    @PutMapping("/status/{idConvenio}")
     public ResponseEntity<?> updateStatus(@PathVariable("idConvenio") Long idConvenio,
                                           @RequestBody Convenio convenio)
     {

@@ -14,21 +14,24 @@ import java.util.List;
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Long>
 {
-    @Query("SELECT Agenda FROM Agenda " +
-            "WHERE :datade BETWEEN Agenda.dataDe AND Agenda.dataAte " +
-            "AND :dataAte BETWEEN Agenda.dataDe AND Agenda.dataAte " +
-            "AND Agenda.medico = :medico " +
-            "AND Agenda.paciente = :paciente")
+
+    @Query("FROM Agenda agenda " +
+            "WHERE (:datade BETWEEN agenda.dataDe AND agenda.dataAte " +
+            "OR :dataAte BETWEEN agenda.dataDe AND agenda.dataAte) " +
+            "AND (agenda.medico = :medico OR agenda.paciente = :paciente) " +
+            "AND agenda.id <> :agenda")
     public List<Agenda> conflitoMedicoPaciente(
+            @Param("agenda") Long idAgenda,
             @Param("datade") LocalDateTime dataDe,
-            @Param("dataate") LocalDateTime dataAte,
+            @Param("dataAte") LocalDateTime dataAte,
             @Param("medico") Long idMedico,
             @Param("paciente") Long idPaciente
     );
 
+    @Modifying
     @Query("UPDATE Agenda agenda " +
             "SET agenda.status = :agendaStatus " +
-            "WHERE agenda.id = : idAgenda")
+            "WHERE agenda.id = :idAgenda")
     public void updateStatus(@Param("agendaStatus") StatusAgenda agendaStatus,
                              @Param("idAgenda") Long idAgenda);
 

@@ -19,7 +19,8 @@ public class ConvenioService {
 
     public Optional<Convenio> findById(Long id){return this.convenioRepository.findById(id);}
 
-    public Page<Convenio> listAll(Pageable pageable){
+    public Page<Convenio> listAll(Pageable pageable)
+    {
         return this.convenioRepository.findAll(pageable);
     }
 
@@ -27,7 +28,8 @@ public class ConvenioService {
     public void insert(Convenio convenio){this.convenioRepository.save(convenio);};
 
     @Transactional
-    public void update(Convenio convenio, Long id){
+    public void update(Convenio convenio, Long id)
+    {
         if(id == convenio.getId()){
             this.convenioRepository.save(convenio);
         }else{
@@ -36,7 +38,8 @@ public class ConvenioService {
     }
 
     @Transactional
-    public void updateStatus(Long id, Convenio convenio){
+    public void updateStatus(Long id, Convenio convenio)
+    {
         if(id == convenio.getId()){
             this.convenioRepository.updateStatus(LocalDateTime.now(), convenio.getId());
         }else{
