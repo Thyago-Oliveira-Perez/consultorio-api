@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -41,9 +42,13 @@ public class SecretariaService {
 
     @Transactional
     public void updateStatus(Secretaria secretaria, Long id){
-        if (id == secretaria.getId()) {
-            this.secretariaRepository.updateStatus(secretaria.getExcluido(), secretaria.getId());
-        }else {
+
+        Optional<Secretaria> secretariaEntity = this.secretariaRepository.findById(id);
+
+        if(secretariaEntity.isPresent() && secretariaEntity.get().getExcluido() == null){
+            this.secretariaRepository.updateStatus(LocalDateTime.now(), secretaria.getId());
+        }
+        else {
             throw new RuntimeException();
         }
     }

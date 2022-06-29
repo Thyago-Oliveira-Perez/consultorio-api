@@ -60,9 +60,9 @@ public class SecretariaController {
     {
         try{
             this.secretariaService.updateStatus(secretaria, idSecretaria);
-            return ResponseEntity.ok().body(("Secretaria Atualizada com Sucesso!"));
+            return ResponseEntity.ok().body(("Secretaria Desativada com Sucesso!"));
         }catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Secretaria não existe no banco.");
         }
     }
 }

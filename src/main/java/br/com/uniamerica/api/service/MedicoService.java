@@ -38,7 +38,7 @@ public class MedicoService {
 
         Optional<Medico> medicoEntity = this.medicoRepository.findById(id);
 
-        if(medicoEntity.isPresent()){
+        if(medicoEntity.isPresent() && medicoEntity.get().getExcluido() == null){
             this.medicoRepository.updateStatus(LocalDateTime.now(), medico.getId());
         }
         else{
