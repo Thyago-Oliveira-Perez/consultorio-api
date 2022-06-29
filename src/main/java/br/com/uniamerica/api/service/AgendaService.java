@@ -36,53 +36,61 @@ public class AgendaService {
     }
 
     @Transactional
-    public void updateStatus(Agenda agenda, StatusAgenda status, Secretaria secretaria) {
+    public void updateStatus(Long idAgenda, StatusAgenda status, Secretaria secretaria) {
 
-        switch (status) {
-            case rejeitado:
-                this.updateStatusPendenteToRejeitado(agenda, secretaria);
-                break;
-            case aprovado:
-                this.updateStatusPendenteToAprovado(agenda, secretaria);
-                break;
+        Optional<Agenda> agendaEntity = this.agendaRepository.findById(idAgenda);
 
-            case cancelado:
-                this.updateStatusPendenteOrAprovadoToCancelado(agenda, secretaria, agenda.getPaciente());
-                break;
-            case compareceu:
-                this.updateStatusAprovadoToCompareceu(agenda, secretaria);
-                break;
+        if(agendaEntity.isPresent() && agendaEntity.get().getExcluido() == null){
+            switch (status) {
+                case rejeitado:
+                    this.updateStatusPendenteToRejeitado(agendaEntity.get(), secretaria, status);
+                    break;
+                case aprovado:
+                    this.updateStatusPendenteToAprovado(agendaEntity.get(), secretaria, status);
+                    break;
 
-            case nao_compareceu:
-                this.updateStatusAprovadoToNaoCompareceu(agenda, secretaria);
-                break;
+                case cancelado:
+                    this.updateStatusPendenteOrAprovadoToCancelado(agendaEntity.get(), secretaria, agendaEntity.get().getPaciente(), status);
+                    break;
+                case compareceu:
+                    this.updateStatusAprovadoToCompareceu(agendaEntity.get(), secretaria, status);
+                    break;
+
+                case nao_compareceu:
+                    this.updateStatusAprovadoToNaoCompareceu(agendaEntity.get(), secretaria, status);
+                    break;
+            }
         }
     }
 
-    public void updateStatusPendenteToRejeitado(Agenda agenda, Secretaria secretaria)
+    @Transactional
+    public void updateStatusPendenteToRejeitado(Agenda agenda, Secretaria secretaria, StatusAgenda status)
     {
         if(secretaria != null)
         {
-            Assert.isTrue(agendaRepository.findById(agenda.getId()).get().getStatus().equals(StatusAgenda.pendente), "Assert = false");
-            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.rejeitado), "Assert = false");
+            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.pendente), "Error: PendenteToRejeitado invalid params");
+            Assert.isTrue(status.equals(StatusAgenda.rejeitado), "Error: PendenteToRejeitado invalid params");
 
-            agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
+            this.agendaRepository.updateStatus(status, agenda.getId());
 
             historico = new Historico(LocalDateTime.now(), agenda.getStatus(),
                                                 agenda.getObservacao(), secretaria,
                                                 agenda.getPaciente(), agenda);
             historicoRepository.save(historico);
+        }else{
+            throw new RuntimeException();
         }
     }
 
-    public void updateStatusPendenteToAprovado(Agenda agenda, Secretaria secretaria)
+    @Transactional
+    public void updateStatusPendenteToAprovado(Agenda agenda, Secretaria secretaria, StatusAgenda status)
     {
         if(secretaria != null)
         {
-            Assert.isTrue(agendaRepository.findById(agenda.getId()).get().getStatus().equals(StatusAgenda.pendente), "Assert = false");
-            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.aprovado), "Assert = false");
+            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.pendente), "Error: PendenteToAprovado invalid params");
+            Assert.isTrue(status.equals(StatusAgenda.aprovado), "Error: PendenteToAprovado invalid params");
 
-            agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
+            agendaRepository.updateStatus(status, agenda.getId());
 
             historico = new Historico(LocalDateTime.now(), agenda.getStatus(),
                     agenda.getObservacao(), secretaria,
@@ -92,14 +100,15 @@ public class AgendaService {
         }
     }
 
-    public void updateStatusPendenteOrAprovadoToCancelado(Agenda agenda, Secretaria secretaria, Paciente paciente)
+    @Transactional
+    public void updateStatusPendenteOrAprovadoToCancelado(Agenda agenda, Secretaria secretaria, Paciente paciente, StatusAgenda statusAgenda)
     {
         if(secretaria != null || paciente != null)
         {
-            if(agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.pendente)
-                || agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.aprovado))
+            if(agenda.getStatus().equals(StatusAgenda.pendente)
+                || agenda.getStatus().equals(StatusAgenda.aprovado))
             {
-                agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
+                agendaRepository.updateStatus(statusAgenda, agenda.getId());
 
                 historico = new Historico(LocalDateTime.now(), agenda.getStatus(),
                         agenda.getObservacao(), secretaria,
@@ -110,14 +119,15 @@ public class AgendaService {
         }
     }
 
-    public void updateStatusAprovadoToCompareceu(Agenda agenda, Secretaria secretaria)
+    @Transactional
+    public void updateStatusAprovadoToCompareceu(Agenda agenda, Secretaria secretaria, StatusAgenda statusAgenda)
     {
         if(secretaria != null)
         {
-            Assert.isTrue(agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.aprovado), "Assets = false");
-            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.aprovado), "Error: AprovadoToCompareceu");
+            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Error: AprovadoToCompareceu - Data Inválida");
 
-            agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
+            agendaRepository.updateStatus(statusAgenda, agenda.getId());
 
             historico = new Historico(LocalDateTime.now(), agenda.getStatus(),
                     agenda.getObservacao(), secretaria,
@@ -128,14 +138,15 @@ public class AgendaService {
         }
     }
 
-    public void updateStatusAprovadoToNaoCompareceu(Agenda agenda, Secretaria secretaria)
+    @Transactional
+    public void updateStatusAprovadoToNaoCompareceu(Agenda agenda, Secretaria secretaria, StatusAgenda statusAgenda)
     {
         if(secretaria != null)
         {
-            Assert.isTrue(agendaRepository.getById(agenda.getId()).getStatus().equals(StatusAgenda.aprovado), "Assets = false");
-            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Assets = false");
+            Assert.isTrue(agenda.getStatus().equals(StatusAgenda.aprovado), "Error: AprovadoToNaoCompareceu");
+            Assert.isTrue(this.dataPassada(agenda.getDataDe(), agenda.getDataAte()), "Error: AprovadoToNaoCompareceu - Data Inválida");
 
-            agendaRepository.updateStatus(agenda.getStatus(), agenda.getId());
+            agendaRepository.updateStatus(statusAgenda, agenda.getId());
 
             historico = new Historico(LocalDateTime.now(), agenda.getStatus(),
                     agenda.getObservacao(), secretaria,
@@ -163,11 +174,12 @@ public class AgendaService {
         if(!agenda.getEncaixe())
         {
             this.validacoesPadroes(agenda);
-        }else
+        }
+        else
         {
             Assert.isTrue(horarioValido(agenda.getDataDe()), "Horario de inválido");
             Assert.isTrue(horarioValido(agenda.getDataAte()), "Horario ate inválido");
-            //Assert.isTrue(horariosMedicosEPacientes(agenda), "Assets = false");
+            Assert.isTrue(horariosMedicosEPacientes(agenda), "Conflito de horario medico e paciente");
         }
     }
 
@@ -246,11 +258,11 @@ public class AgendaService {
     {
         Assert.isTrue(!agenda.getEncaixe(), "Agenda não é encaixe!");
         Assert.isTrue(this.dataValida(agenda.getDataDe(), agenda.getDataAte()), "Data inválida!");
-        Assert.isTrue(this.horarioValido(agenda.getDataDe()), "Horário de inválido");
-        Assert.isTrue(this.horarioValido(agenda.getDataAte()), "Horário ate inválido");
+        Assert.isTrue(this.horarioValido(agenda.getDataDe()), "Horário De inválido");
+        Assert.isTrue(this.horarioValido(agenda.getDataAte()), "Horário Ate inválido");
         Assert.isTrue(this.diaValido(agenda.getDataDe()), "Data de inválida");
         Assert.isTrue(this.diaValido(agenda.getDataAte()), "Data até inválida");
-        Assert.isTrue(this.horariosMedicosEPacientes(agenda), "Conflito de horario medico e paciente");
+        //Assert.isTrue(this.horariosMedicosEPacientes(agenda), "Conflito de horario medico e paciente");
     }
 
 }

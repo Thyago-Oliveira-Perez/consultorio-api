@@ -57,12 +57,13 @@ public class AgendaController {
         }
     }
 
-    @PutMapping("/status")
-    public ResponseEntity<?> updateStatus(@RequestBody Agenda agenda)
+    @PutMapping("/status/{idAgenda}")
+    public ResponseEntity<?> updateStatus(@PathVariable("idAgenda") Long idAgenda,
+                                          @RequestBody Agenda agenda)
     {
         try
         {
-            this.agendaService.updateStatus(agenda, agenda.getStatus(), agenda.getSecretaria());
+            this.agendaService.updateStatus(idAgenda, agenda.getStatus(), agenda.getSecretaria());
             return ResponseEntity.ok().body("Status da Agenda Atualizada com Sucesso!");
         }
         catch (RuntimeException e)
