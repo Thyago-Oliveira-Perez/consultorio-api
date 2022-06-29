@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,7 +29,8 @@ public class EspecialidadeService {
 
     @Transactional
     public void update(Long id, Especialidade especialidade){
-        if (id == especialidade.getId()) {
+        System.out.println(id + "   " +especialidade.getId());
+        if (id.equals(especialidade.getId())) {
             this.especialidadeRepository.save(especialidade);
         }
         else {
@@ -43,8 +45,11 @@ public class EspecialidadeService {
 
     @Transactional
     public void updateStatus(Long id, Especialidade especialidade){
-        if (id == especialidade.getId()) {
-            this.especialidadeRepository.updateStatus(especialidade.getExcluido(), especialidade.getId());
+
+        Optional<Especialidade> especialidadeEntity = this.especialidadeRepository.findById(id);
+
+        if (especialidadeEntity.isPresent() && especialidadeEntity.get().getExcluido() == null) {
+            this.especialidadeRepository.updateStatus(LocalDateTime.now(), especialidade.getId());
         }
         else {
             throw new RuntimeException();

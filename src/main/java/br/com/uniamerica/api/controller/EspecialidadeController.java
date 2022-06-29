@@ -57,9 +57,9 @@ public class EspecialidadeController {
     {
         try{
             this.especialidadeService.updateStatus(idEspecialidade, especialidade);
-            return ResponseEntity.ok().body("Especialidade Atualizada com Sucesso!");
+            return ResponseEntity.ok().body("Especialidade Desativada com Sucesso!");
         }catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Especialidade não existe no banco.");
         }
     }
 }
