@@ -28,7 +28,7 @@ public class MedicoService {
         if(id == medico.getId()) {
             this.medicoRepository.save(medico);
         }else{
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 

@@ -2,6 +2,7 @@ package br.com.uniamerica.api.service;
 
 import br.com.uniamerica.api.entity.Paciente;
 import br.com.uniamerica.api.entity.TipoAtendimento;
+import br.com.uniamerica.api.models.UpdatePaciente;
 import br.com.uniamerica.api.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,17 +39,27 @@ public class PacienteService {
 
     @Transactional
     public void update(Paciente paciente, Long id){
-        if(paciente.getId() == id){
+
+        Optional<Paciente> userEntity = this.pacienteRepository.findById(id);
+
+        if(userEntity.isPresent()){
             this.pacienteRepository.save(paciente);
-        }else{
+        }
+        else{
             throw new RuntimeException();
         }
     }
 
     @Transactional
     public void updateStatus(Long id, Paciente paciente){
-        if(paciente.getId() == id){
+
+        Optional<Paciente> pacienteEntity = this.pacienteRepository.findById(id);
+
+        if(pacienteEntity.isPresent() && pacienteEntity.get().getExcluido() == null){
             this.pacienteRepository.updateStatus(LocalDateTime.now(), paciente.getId());
+        }
+        else{
+            throw new RuntimeException();
         }
     }
 

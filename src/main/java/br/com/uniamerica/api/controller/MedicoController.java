@@ -57,8 +57,8 @@ public class MedicoController {
                                     @RequestBody Medico medico)
     {
         try{
-            this.medicoService.update(medico, idMedico);
-            return ResponseEntity.ok().body(("Medico Atualizado com Sucesso!"));
+            this.medicoService.updateStatus(medico, idMedico);
+            return ResponseEntity.ok().body(("Medico Desativado com Sucesso!"));
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
