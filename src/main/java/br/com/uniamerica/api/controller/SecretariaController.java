@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.print.DocFlavor;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/secretarias")
 public class SecretariaController {
 

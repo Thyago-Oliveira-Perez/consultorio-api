@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.awt.geom.RectangularShape;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/historicos")
 public class HistoricoController {
 
