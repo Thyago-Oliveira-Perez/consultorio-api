@@ -2,7 +2,6 @@ package br.com.uniamerica.api.service;
 
 import br.com.uniamerica.api.entity.Paciente;
 import br.com.uniamerica.api.entity.TipoAtendimento;
-import br.com.uniamerica.api.models.UpdatePaciente;
 import br.com.uniamerica.api.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -44,12 +44,12 @@ public class EspecialidadeService {
     }
 
     @Transactional
-    public void updateStatus(Long id, Especialidade especialidade){
+    public void updateStatus(Long id){
 
         Optional<Especialidade> especialidadeEntity = this.especialidadeRepository.findById(id);
 
         if (especialidadeEntity.isPresent() && especialidadeEntity.get().getExcluido() == null) {
-            this.especialidadeRepository.updateStatus(LocalDateTime.now(), especialidade.getId());
+            this.especialidadeRepository.updateStatus(LocalDateTime.now(), id);
         }
         else {
             throw new RuntimeException();

@@ -29,6 +29,11 @@ public abstract class AbstractEntity {
     @Column(name = "excluido")
     private LocalDateTime excluido;
 
+    @Getter @Setter
+    @Column(name = "ativo")
+    private Boolean ativo;
+
+
     public AbstractEntity(Long id){
         this.id = id;
     }

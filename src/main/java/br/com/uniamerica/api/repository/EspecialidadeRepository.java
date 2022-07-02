@@ -14,8 +14,10 @@ public interface EspecialidadeRepository extends JpaRepository<Especialidade, Lo
 
     @Modifying
     @Query("UPDATE Especialidade especialidade " +
-            "SET especialidade.excluido = :dataExcluido " +
-            "WHERE especialidade.id = :idEspecialidade")
+            "SET especialidade.excluido = :dataExcluido," +
+            "especialidade.ativo = false " +
+            "WHERE " +
+            "especialidade.id = :idEspecialidade")
 
     public void updateStatus(@Param("dataExcluido") LocalDateTime dataExcluido,
                              @Param("idEspecialidade") Long idEspecialidade);
