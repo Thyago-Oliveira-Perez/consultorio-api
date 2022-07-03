@@ -1,5 +1,6 @@
 package br.com.uniamerica.api.service;
 
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.entity.Secretaria;
 import br.com.uniamerica.api.repository.SecretariaRepository;
 import net.bytebuddy.asm.Advice;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,13 @@ public class SecretariaService {
         return secretariaRepository.findById(id);
     }
 
-    public Page<Secretaria> listAll(Pageable pageable){
+    public Page<Especialidade> findByName(Pageable pageable, String name){
+        String newName = name.toLowerCase(Locale.ROOT);
+        System.out.println(newName);
+        return this.secretariaRepository.findAllByName(newName, pageable);
+    }
+
+    public Page<Secretaria> listAllHabilitados(Pageable pageable){
         return secretariaRepository.findAll(pageable);
     }
 

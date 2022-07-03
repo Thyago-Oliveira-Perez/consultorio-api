@@ -1,5 +1,6 @@
 package br.com.uniamerica.api.controller;
 
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.entity.Paciente;
 import br.com.uniamerica.api.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class PacienteController {
     public ResponseEntity<Paciente> findById(@PathVariable("idPaciente")Long idPaciente)
     {
         return ResponseEntity.ok().body(this.pacienteService.findById(idPaciente).get());
+    }
+
+    @GetMapping("/search/{nameEspecialidade}")
+    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    {
+        return ResponseEntity.ok().body(this.pacienteService.findByName(pageable, nameEspecialidade));
     }
 
     @GetMapping

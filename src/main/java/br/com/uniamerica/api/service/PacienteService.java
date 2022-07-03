@@ -1,5 +1,6 @@
 package br.com.uniamerica.api.service;
 
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.entity.Paciente;
 import br.com.uniamerica.api.entity.TipoAtendimento;
 import br.com.uniamerica.api.repository.PacienteRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,12 @@ public class PacienteService {
 
     public Optional<Paciente> findById(Long id){
         return this.pacienteRepository.findById(id);
+    }
+
+    public Page<Especialidade> findByName(Pageable pageable, String name){
+        String newName = name.toLowerCase(Locale.ROOT);
+        System.out.println(newName);
+        return this.pacienteRepository.findAllByName(newName, pageable);
     }
 
     public Page<Paciente> listAll(Pageable pageable){

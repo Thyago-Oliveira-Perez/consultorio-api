@@ -1,6 +1,8 @@
 package br.com.uniamerica.api.repository;
 
 import br.com.uniamerica.api.entity.Medico;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +23,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     public void updateStatus(@Param("dataExcluido")LocalDateTime dataExcluido,
                              @Param("idMedico") Long id);
 
+    @Query("FROM Medico medico WHERE medico.nome like :name")
+    public Page findAllByName(@Param("name") String name, Pageable pageable);
 }

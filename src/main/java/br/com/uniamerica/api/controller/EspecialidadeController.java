@@ -23,7 +23,7 @@ public class EspecialidadeController {
         return ResponseEntity.ok().body(this.especialidadeService.findById(idEspecialidade).get());
     }
 
-    @GetMapping("/search/{nameEspecialidade}")
+    @GetMapping("/search/{nameSecretaria}")
     public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
     {
         return ResponseEntity.ok().body(this.especialidadeService.findByName(pageable, nameEspecialidade));

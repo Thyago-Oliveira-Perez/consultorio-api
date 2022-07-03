@@ -1,6 +1,7 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Convenio;
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.service.ConvenioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,12 @@ public class ConvenioController {
             @PathVariable("idConvenio")Long idConvenoio)
     {
         return ResponseEntity.ok().body(this.convenioService.findById(idConvenoio).get());
+    }
+
+    @GetMapping("/search/{nameEspecialidade}")
+    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    {
+        return ResponseEntity.ok().body(this.convenioService.findByName(pageable, nameEspecialidade));
     }
 
     @GetMapping

@@ -1,5 +1,6 @@
 package br.com.uniamerica.api.controller;
 
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.entity.Secretaria;
 import br.com.uniamerica.api.service.SecretariaService;
 import org.apache.coyote.Response;
@@ -26,10 +27,16 @@ public class SecretariaController {
         return ResponseEntity.ok().body(this.secretariaService.findById(idSecretaria).get());
     }
 
+    @GetMapping("/search/{nameEspecialidade}")
+    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    {
+        return ResponseEntity.ok().body(this.secretariaService.findByName(pageable, nameEspecialidade));
+    }
+
     @GetMapping
     public ResponseEntity<Page<Secretaria>> findAll(Pageable pageable)
     {
-        return ResponseEntity.ok().body(this.secretariaService.listAll(pageable));
+        return ResponseEntity.ok().body(this.secretariaService.listAllHabilitados(pageable));
     }
 
     @PostMapping
