@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,6 +24,11 @@ public class EspecialidadeService {
         return this.especialidadeRepository.findById(id);
     }
 
+    public Page<Especialidade> findByName(Pageable pageable, String name){
+        String newName = name.toLowerCase(Locale.ROOT);
+        System.out.println(newName);
+        return this.especialidadeRepository.findAllByName(newName, pageable);
+    }
     public Page<Especialidade> listAll(Pageable pageable){
         return this.especialidadeRepository.findAll(pageable);
     }
