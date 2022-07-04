@@ -17,7 +17,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     @Modifying
     @Query("UPDATE Medico medico " +
-            "SET medico.excluido = :dataExcluido " +
+            "SET medico.excluido = :dataExcluido, medico.ativo = false " +
             "WHERE medico.id = :idMedico")
 
     public void updateStatus(@Param("dataExcluido")LocalDateTime dataExcluido,

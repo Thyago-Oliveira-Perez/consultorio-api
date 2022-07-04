@@ -27,10 +27,10 @@ public class SecretariaController {
         return ResponseEntity.ok().body(this.secretariaService.findById(idSecretaria).get());
     }
 
-    @GetMapping("/search/{nameEspecialidade}")
-    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    @GetMapping("/search/{nameSecretaria}")
+    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameSecretaria")String nameSecretaria)
     {
-        return ResponseEntity.ok().body(this.secretariaService.findByName(pageable, nameEspecialidade));
+        return ResponseEntity.ok().body(this.secretariaService.findByName(pageable, nameSecretaria));
     }
 
     @GetMapping
@@ -63,11 +63,10 @@ public class SecretariaController {
     }
 
     @PutMapping("/status/{idSecretaria}")
-    public ResponseEntity<?> updateStatus(@PathVariable("idSecretaria")Long idSecretaria,
-                                          @RequestBody Secretaria secretaria)
+    public ResponseEntity<?> disable(@PathVariable("idSecretaria")Long idSecretaria)
     {
         try{
-            this.secretariaService.updateStatus(secretaria, idSecretaria);
+            this.secretariaService.disable(idSecretaria);
             return ResponseEntity.ok().body(("Secretaria Desativada com Sucesso!"));
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body("Secretaria não existe no banco.");

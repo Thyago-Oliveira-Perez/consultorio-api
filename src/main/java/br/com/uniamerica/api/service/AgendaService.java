@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -160,6 +161,12 @@ public class AgendaService {
         return this.agendaRepository.findById(id);
     }
 
+
+    public Page<Especialidade> findByNamePaciente(Pageable pageable, String name){
+        String newName = name.toLowerCase(Locale.ROOT);
+        System.out.println(newName);
+        return this.agendaRepository.findAllByNamePaciente(newName, pageable);
+    }
     public Page<Agenda> listAll(Pageable pageable){
         return this.agendaRepository.findAll(pageable);
     }
