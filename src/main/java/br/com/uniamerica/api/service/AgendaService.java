@@ -163,9 +163,7 @@ public class AgendaService {
 
 
     public Page<Especialidade> findByNamePaciente(Pageable pageable, String name){
-        String newName = name.toLowerCase(Locale.ROOT);
-        System.out.println(newName);
-        return this.agendaRepository.findAllByNamePaciente(newName, pageable);
+        return this.agendaRepository.findAllByNamePaciente(name, pageable);
     }
     public Page<Agenda> listAll(Pageable pageable){
         return this.agendaRepository.findAll(pageable);

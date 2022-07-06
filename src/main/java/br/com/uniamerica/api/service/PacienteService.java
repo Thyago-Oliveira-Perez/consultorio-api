@@ -29,10 +29,8 @@ public class PacienteService {
         return this.pacienteRepository.findById(id);
     }
 
-    public Page<Especialidade> findByName(Pageable pageable, String name){
-        String newName = name.toLowerCase(Locale.ROOT);
-        System.out.println(newName);
-        return this.pacienteRepository.findAllByName(newName, pageable);
+    public Page<Paciente> findByName(Pageable pageable, String name){
+        return this.pacienteRepository.findAllByName(name, pageable);
     }
 
     public Page<Paciente> listAll(Pageable pageable){

@@ -25,8 +25,8 @@ public class ConvenioController {
         return ResponseEntity.ok().body(this.convenioService.findById(idConvenoio).get());
     }
 
-    @GetMapping("/search/{nameEspecialidade}")
-    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    @GetMapping("/search/{nameConvenio}")
+    public ResponseEntity<Page<Convenio>> findByName(Pageable pageable, @PathVariable("nameConvenio")String nameEspecialidade)
     {
         return ResponseEntity.ok().body(this.convenioService.findByName(pageable, nameEspecialidade));
     }

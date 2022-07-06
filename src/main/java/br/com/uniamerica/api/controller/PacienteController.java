@@ -24,10 +24,10 @@ public class PacienteController {
         return ResponseEntity.ok().body(this.pacienteService.findById(idPaciente).get());
     }
 
-    @GetMapping("/search/{nameEspecialidade}")
-    public ResponseEntity<Page<Especialidade>> findByName(Pageable pageable, @PathVariable("nameEspecialidade")String nameEspecialidade)
+    @GetMapping("/search/{namePaciente}")
+    public ResponseEntity<Page<Paciente>> findByName(Pageable pageable, @PathVariable("namePaciente")String namePaciente)
     {
-        return ResponseEntity.ok().body(this.pacienteService.findByName(pageable, nameEspecialidade));
+        return ResponseEntity.ok().body(this.pacienteService.findByName(pageable, namePaciente));
     }
 
     @GetMapping

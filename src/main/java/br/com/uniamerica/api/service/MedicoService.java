@@ -22,9 +22,7 @@ public class MedicoService {
     public Optional<Medico> findById(Long id){return medicoRepository.findById(id);}
 
     public Page<Especialidade> findByName(Pageable pageable, String name){
-        String newName = name.toLowerCase(Locale.ROOT);
-        System.out.println(newName);
-        return this.medicoRepository.findAllByName(newName, pageable);
+        return this.medicoRepository.findAllByName(name, pageable);
     }
 
     public Page<Medico> listAll(Pageable pageable){return medicoRepository.findAll(pageable);}

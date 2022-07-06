@@ -21,10 +21,8 @@ public class ConvenioService {
 
     public Optional<Convenio> findById(Long id){return this.convenioRepository.findById(id);}
 
-    public Page<Especialidade> findByName(Pageable pageable, String name){
-        String newName = name.toLowerCase(Locale.ROOT);
-        System.out.println(newName);
-        return this.convenioRepository.findAllByName(newName, pageable);
+    public Page<Convenio> findByName(Pageable pageable, String name){
+        return this.convenioRepository.findAllByName(name, pageable);
     }
 
     public Page<Convenio> listAll(Pageable pageable)

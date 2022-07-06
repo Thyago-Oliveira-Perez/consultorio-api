@@ -25,9 +25,7 @@ public class EspecialidadeService {
     }
 
     public Page<Especialidade> findByName(Pageable pageable, String name){
-        String newName = name.toLowerCase(Locale.ROOT);
-        System.out.println(newName);
-        return this.especialidadeRepository.findAllByName(newName, pageable);
+        return this.especialidadeRepository.findAllByName(name, pageable);
     }
     public Page<Especialidade> listAll(Pageable pageable){
         return this.especialidadeRepository.findAll(pageable);
