@@ -33,7 +33,6 @@ public class EspecialidadeService {
 
     @Transactional
     public void update(Long id, Especialidade especialidade){
-        System.out.println(id + "   " +especialidade.getId());
         if (id.equals(especialidade.getId())) {
             this.especialidadeRepository.save(especialidade);
         }

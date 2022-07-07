@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,7 +33,7 @@ public class MedicoService {
 
     @Transactional
     public void update(Medico medico, Long id){
-        if(id == medico.getId()) {
+        if(id.equals(medico.getId())) {
             this.medicoRepository.save(medico);
         }else{
             throw new RuntimeException();
