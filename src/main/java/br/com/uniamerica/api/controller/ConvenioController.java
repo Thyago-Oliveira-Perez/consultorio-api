@@ -62,11 +62,10 @@ public class ConvenioController {
     }
 
     @PutMapping("/status/{idConvenio}")
-    public ResponseEntity<?> updateStatus(@PathVariable("idConvenio") Long idConvenio,
-                                          @RequestBody Convenio convenio)
+    public ResponseEntity<?> updateStatus(@PathVariable("idConvenio") Long idConvenio)
     {
         try{
-            this.convenioService.updateStatus(idConvenio, convenio);
+            this.convenioService.updateStatus(idConvenio);
             return ResponseEntity.ok().body("Convenio Desabilitado com Sucesso!");
         }catch(RuntimeException e)
         {

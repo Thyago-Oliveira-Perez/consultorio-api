@@ -46,13 +46,11 @@ public class ConvenioService {
     }
 
     @Transactional
-    public void updateStatus(Long id, Convenio convenio)
+    public void updateStatus(Long id)
     {
-
         Optional<Convenio> convenioEntity = this.convenioRepository.findById(id);
-
-        if(convenioEntity.isPresent() && convenioEntity.get().getExcluido() == null){
-            this.convenioRepository.updateStatus(LocalDateTime.now(), convenio.getId());
+        if(convenioEntity.isPresent()){
+            this.convenioRepository.updateStatus(!convenioEntity.get().getAtivo(), id);
         }else{
             throw new RuntimeException();
         }
