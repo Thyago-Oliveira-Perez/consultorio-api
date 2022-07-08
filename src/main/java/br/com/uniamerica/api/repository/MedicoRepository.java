@@ -17,10 +17,10 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     @Modifying
     @Query("UPDATE Medico medico " +
-            "SET medico.excluido = :dataExcluido, medico.ativo = false " +
+            "SET medico.ativo = :newStatus " +
             "WHERE medico.id = :idMedico")
 
-    public void updateStatus(@Param("dataExcluido")LocalDateTime dataExcluido,
+    public void updateStatus(@Param("newStatus")boolean newStatus,
                              @Param("idMedico") Long id);
 
     @Query("FROM Medico medico WHERE medico.nome like :name")

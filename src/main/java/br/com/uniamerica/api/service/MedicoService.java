@@ -41,12 +41,12 @@ public class MedicoService {
     }
 
     @Transactional
-    public void updateStatus(Medico medico, Long id){
+    public void updateStatus(Long id){
 
         Optional<Medico> medicoEntity = this.medicoRepository.findById(id);
 
-        if(medicoEntity.isPresent() && medicoEntity.get().getExcluido() == null){
-            this.medicoRepository.updateStatus(LocalDateTime.now(), medico.getId());
+        if(medicoEntity.isPresent()){
+            this.medicoRepository.updateStatus(!medicoEntity.get().getAtivo(), id);
         }
         else{
             throw new RuntimeException();
