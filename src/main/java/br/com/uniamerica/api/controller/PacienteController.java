@@ -60,11 +60,10 @@ public class PacienteController {
     }
 
     @PutMapping("/status/{idPaciente}")
-    public ResponseEntity<?> updateStatus(@PathVariable("idPaciente") Long idPaciente,
-                                          @RequestBody Paciente paciente)
+    public ResponseEntity<?> updateStatus(@PathVariable("idPaciente") Long idPaciente)
     {
         try{
-            this.pacienteService.updateStatus(idPaciente, paciente);
+            this.pacienteService.updateStatus(idPaciente);
             return ResponseEntity.ok().body(("Paciente Desativado com Sucesso!"));
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body("Paciente não existe no banco!");

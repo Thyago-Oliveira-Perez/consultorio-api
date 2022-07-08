@@ -16,9 +16,9 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     @Modifying
     @Query("UPDATE Paciente paciente " +
-            "SET paciente.excluido = :dataExcluido, paciente.ativo = false " +
+            "SET paciente.ativo = :newStatus " +
             "WHERE paciente.id = :idPaciente")
-    public void updateStatus(@Param("dataExcluido")LocalDateTime dataExcluido,
+    public void updateStatus(@Param("newStatus")boolean newStatus,
                              @Param("idPaciente")Long idPaciente);
 
     @Query("FROM Paciente paciente WHERE paciente.nome like :name")
