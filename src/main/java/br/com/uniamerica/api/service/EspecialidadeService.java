@@ -51,8 +51,8 @@ public class EspecialidadeService {
 
         Optional<Especialidade> especialidadeEntity = this.especialidadeRepository.findById(id);
 
-        if (especialidadeEntity.isPresent() && especialidadeEntity.get().getExcluido() == null) {
-            this.especialidadeRepository.updateStatus(LocalDateTime.now(), id);
+        if (especialidadeEntity.isPresent()) {
+            this.especialidadeRepository.updateStatus(!especialidadeEntity.get().getAtivo(), id);
         }
         else {
             throw new RuntimeException();
