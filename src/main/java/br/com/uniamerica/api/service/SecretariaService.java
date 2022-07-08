@@ -47,12 +47,12 @@ public class SecretariaService {
     }
 
     @Transactional
-    public void disable(Long id){
+    public void updateStatus(Long id){
 
         Optional<Secretaria> secretariaEntity = this.secretariaRepository.findById(id);
 
-        if(secretariaEntity.isPresent() && secretariaEntity.get().getExcluido() == null){
-            this.secretariaRepository.updateStatus(LocalDateTime.now(), id);
+        if(secretariaEntity.isPresent()){
+            this.secretariaRepository.updateStatus(!secretariaEntity.get().getAtivo(), id);
         }
         else {
             throw new RuntimeException();

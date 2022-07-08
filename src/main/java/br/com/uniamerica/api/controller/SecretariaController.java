@@ -63,10 +63,10 @@ public class SecretariaController {
     }
 
     @PutMapping("/status/{idSecretaria}")
-    public ResponseEntity<?> disable(@PathVariable("idSecretaria")Long idSecretaria)
+    public ResponseEntity<?> updateStatus(@PathVariable("idSecretaria")Long idSecretaria)
     {
         try{
-            this.secretariaService.disable(idSecretaria);
+            this.secretariaService.updateStatus(idSecretaria);
             return ResponseEntity.ok().body(("Secretaria Desativada com Sucesso!"));
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body("Secretaria não existe no banco.");
